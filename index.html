@@ -22,6 +22,7 @@
       margin-top: 15px;
       cursor: crosshair;
       max-width: 100%;
+      height: auto;
     }
     .controls {
       margin: 10px 0;
@@ -136,13 +137,18 @@
 
     canvas.addEventListener('mousedown', () => { drawing = true; });
     canvas.addEventListener('mouseup', () => { drawing = false; saveState(); });
+    canvas.addEventListener('mouseleave', () => { drawing = false; });
     canvas.addEventListener('mousemove', draw);
 
     function draw(e) {
       if (!drawing) return;
+
       const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+
+      const x = (e.clientX - rect.left) * scaleX;
+      const y = (e.clientY - rect.top) * scaleY;
 
       ctx.fillStyle = brushColor;
       ctx.beginPath();
